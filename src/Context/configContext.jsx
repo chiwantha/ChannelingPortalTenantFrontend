@@ -9,13 +9,17 @@ import { motion } from "framer-motion";
 export const ConfigContext = createContext();
 
 export const ConfigContextProvider = ({ children }) => {
+  const hostname = window.location.hostname;
+  // console.log(hostname);
   const [appConfig, setAppConfig] = useState(null);
   const [showLoading, setShowLoading] = useState(true);
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["appConfig"],
     queryFn: async () => {
-      const res = await makeRequest.get("/config/appData/");
+      const res = await makeRequest.post("/config/appData/", {
+        hostname: hostname,
+      });
       return res.data; // Make sure to return res.data if using Axios
     },
   });
